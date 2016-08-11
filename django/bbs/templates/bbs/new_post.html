@@ -1,0 +1,31 @@
+{% include 'bbs/meta_head.html' %}
+{% include 'bbs/meta_header.html' %}
+<div class="container">
+
+<div class="page-header">
+  <hr>
+  <h4><a href="{% url 'bbs:index' %}">论坛</a>
+    >>{{ forum.section.name }}>>
+    <a href="{% url 'bbs:forum' forum.id 1 %}">{{ forum.name }}</a>
+    >>发表帖子</h4>
+</div>
+
+<form enctype="multipart/form-data" action="{% url 'bbs:new_post' forum.id %}" method="post" class="form-horizontal">
+{% csrf_token %}
+{% for field in form %}
+  <div class="form-group">
+    <span class="col-sm-2 control-label">{{ field.label }}</span>
+    <div class="col-sm-8">{{ field }}</div>
+    <div class="col-sm-offset-2">{{ field.errors }}</div>
+  </div>
+{% endfor %}
+<div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10">
+    <button class="btn btn-default" type="submit">发表帖子</button>
+    <button class="btn btn-default" type="reset">清空</button>
+  </div>
+</div>
+</form>
+
+</div>
+{% include 'bbs/meta_footer.html' %}

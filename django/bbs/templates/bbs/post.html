@@ -1,0 +1,127 @@
+{% include 'bbs/meta_head.html' %}
+{% include 'bbs/meta_header.html' %}
+<div class="container">
+
+<div class="page-header">
+  <hr>
+  <h4><a href="{% url 'bbs:index' %}">论坛</a>
+    >>{{ post.forum.section.name }}>>
+    <a href="{% url 'bbs:forum' post.forum.id 1 %}">{{ post.forum.name }}</a>
+    >>{{ post.topic }}</h4>
+
+  {% if post.previous %}
+    <a href="{% url 'bbs:post' post.previous.id 1 %}">上一主题</a>
+  {% else %}
+    上一主题
+  {% endif %}
+
+  {% ifequal page 1 %}
+    上一页
+  {% else %}
+    <a href="{% url 'bbs:post' post.id page|add:-1 %}">上一页</a>
+  {% endifequal %}
+  {{ page }}/{{ post.page_max }}
+  {% ifequal page post.page_max %}
+    下一页
+  {% else %}
+    <a href="{% url 'bbs:post' post.id page|add:1 %}">下一页</a>
+  {% endifequal %}
+
+  {% if post.next %}
+    <a href="{% url 'bbs:post' post.next.id 1 %}">下一主题</a>
+  {% else %}
+    下一主题
+  {% endif %}
+</div>
+
+
+<table class="table table-bordered table-striped">
+  <tr>
+    <th width=180px></th>
+    <th>{{ post.topic }}</th>
+    <th width=8%><a class="btn btn-default" href="#reply" role="button">回复</a></th>
+  </tr>
+
+{% ifequal page 1 %}
+  <tr>
+    <td rowspan="2" align="center">
+      <img src="/static/bbs/default_portrait.jpeg" class="img-rounded" width="130px" height="130px">
+      <br />{{ post.author.name }}
+    </td>
+    <td colspan="2">{{ post.text }}
+    {% ifequal post.pfile_set.count 0 %}
+    {% else %}
+        <hr style="margin:2px;margin-top:10px">附件:<br />
+    {% endifequal %}
+    {% for file in post.pfile_set.all %}
+        <a href="/upload/{{ file.name }}">{{ file.name }}</a><br />
+    {% endfor %}
+    </td>
+  </tr>
+  <tr height=30px>
+    <td colspan="2" class="text-muted" align="right">
+      {% if admin %}
+        {% ifequal post.top 0 %}
+          <a href="{% url 'bbs:top_post' post.id 1 %}">置顶</a>
+        {% else %}
+          <a href="{% url 'bbs:top_post' post.id 0 %}">取消置顶</a>
+        {% endifequal %}
+        <a href="{% url 'bbs:del_post' post.id %}">删除</a>
+      {% else %}
+        {% ifequal request.session.bbsname post.author.name %}
+          <a href="{% url 'bbs:del_post' post.id %}">删除</a>
+        {% endifequal %}
+      {% endif %}
+      1楼 {{ post.date|date:"Y-n-j H:i:s" }}
+    </td>
+  </tr>
+{% endifequal %}
+
+{% for reply in replies %}
+  <tr>
+    <td rowspan="2" align="center">
+      <img src="/static/bbs/default_portrait.jpeg" class="img-rounded" width="130px" height="130px">
+      <br />{{ reply.author.name }}
+    </td>
+    <td colspan="2">{{ reply.text }}</td>
+  </tr>
+  <tr height=30px>
+    <td colspan="2" class="text-muted" align="right">
+      {% if admin %}
+        <a href="{% url 'bbs:del_reply' reply.id %}">删除</a>
+      {% else %}
+        {% ifequal request.session.bbsname reply.author.name %}
+          <a href="{% url 'bbs:del_reply' reply.id %}">删除</a>
+        {% endifequal %}
+      {% endif %}
+      {{ forloop.counter|add:floor }}楼 {{ reply.date|date:"Y-n-j H:i:s" }}
+    </td>
+  </tr>
+{% endfor %}
+
+</table>
+
+
+{% if request.session.bbsname %}
+<form action="{% url 'bbs:post' post.id 1 %}" method="post" class="form-horizontal">
+{% csrf_token %}
+<div class="col-sm-offset-2"><a name="reply"><h4><strong>发表回复</strong></h4></a></div>
+{% for field in form %}
+  <div class="form-group">
+    <span class="col-sm-2 control-label">{{ field.label }}</span>
+    <div class="col-sm-8">{{ field }}</div>
+    <div class="col-sm-offset-2">{{ field.errors }}</div>
+  </div>
+{% endfor %}
+<div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10">
+    <button class="btn btn-default" type="submit">发表回复</button>
+    <button class="btn btn-default" type="reset">清空</button>
+  </div>
+</div>
+</form>
+{% endif %}
+
+
+</div>
+{% include 'bbs/meta_footer.html' %}

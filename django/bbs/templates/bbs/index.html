@@ -1,0 +1,28 @@
+{% include 'bbs/meta_head.html' %}
+{% include 'bbs/meta_header.html' %}
+<div class="container">
+
+{% for sec in sections.all %}
+<div class="jumbotron">
+    <h2>{{ sec.name }}</h2>
+    <span class="text-muted">
+    分区版主:
+    {% for admin in sec.admins.all %}
+        {{ admin.name }}
+    {% endfor %}
+    </span>
+
+    {% for forum in sec.forum_set.all %}
+        <h4><a href="{% url 'bbs:forum' forum.id 1 %}">【{{ forum.name }}】</a>
+        <small>
+        新帖:{{ forum.reply_and_post_count_today }}
+        主题:{{ forum.post_count }}
+        帖数:{{ forum.reply_and_post_count }}
+        </small>
+        </h4>
+    {% endfor %}
+</div>
+{% endfor %}
+
+</div>
+{% include 'bbs/meta_footer.html' %}

@@ -1,0 +1,49 @@
+{% include 'bbs/meta_head.html' %}
+{% include 'bbs/meta_header.html' %}
+<div class="container">
+
+<div class="page-header">
+  <hr>
+  <h4><a href="{% url 'bbs:index' %}">论坛</a>>>{{ forum.section.name }}>>{{ forum.name }}</h4>
+  <a class="btn btn-small btn-primary" href="{% url 'bbs:new_post' forum.id %}" role="button">发帖</a>
+  {% ifequal page 1 %}
+    上一页
+  {% else %}
+    <a href="{% url 'bbs:forum' forum.id page|add:-1 %}">上一页</a>
+  {% endifequal %}
+  {{ page }}/{{ forum.page_max }}
+  {% ifequal page forum.page_max %}
+    下一页
+  {% else %}
+    <a href="{% url 'bbs:forum' forum.id page|add:1 %}">下一页</a>
+  {% endifequal %}
+</div>
+
+<table class="table table-hover">
+<thead>
+  <tr>
+    <th width=60%>主题</th>
+    <th width=17%>作者/日期</th>
+    <th width=8%>回复</th>
+    <th width=15%>最后发表</th>
+  </tr>
+</thead>
+{% for post in posts %}
+<tr>
+    <td><a href="{% url 'bbs:post' post.id 1 %}">
+      {% ifequal post.top 0 %}
+        {{ post.topic }}
+      {% else %}
+        【&uArr;】<strong>{{ post.topic }}</strong>
+      {% endifequal %}
+      </a></td>
+    <td>{{ post.author.name }}
+      <span class="text-muted small">{{ post.date|date:"Y-n-j" }}</span></td>
+    <td>{{ post.reply_set.count }}</td>
+    <td>{{ post.last_reply_author }}</td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+{% include 'bbs/meta_footer.html' %}

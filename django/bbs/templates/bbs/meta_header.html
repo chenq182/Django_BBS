@@ -1,0 +1,35 @@
+</head>
+<body>
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">陈诠的个人主站</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/">主页</a></li>
+        <li><a href="/about">关于</a></li>
+        <li><a href="/email">邮箱</a></li>
+        <li class="active dropdown">
+          <a href="/bbs" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">论坛 <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/bbs">首页</a></li>
+            <li role="separator" class="divider"></li>
+            <li class="dropdown-header">管理</li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+{% if request.session.bbsname %}
+        <li class="active"><a href="{% url 'bbs:user' %}">{{ request.session.bbsname }}</a></li>
+        <li><a href="{% url 'bbs:logout' %}">注销</a></li>
+{% else %}
+        <li class="active"><a href="{% url 'bbs:login' %}">登录</a></li>
+        <li><a href="{% url 'bbs:register' %}">注册</a></li>
+{% endif %}
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+

@@ -1,0 +1,19 @@
+{% include 'bbs/meta_head.html' %}
+<link rel="stylesheet" href="/static/bbs/login.css">
+{% include 'bbs/meta_header.html' %}
+
+
+<form action="{% url 'bbs:register' %}" method="post" class="form-signin">
+{% csrf_token %}
+  <br /><br />
+  <h2 class="form-signin-heading">请注册</h2>
+{% for field in form %}
+    <!--{{ field.label }}-->
+    {{ field }}
+    {{ field.errors }}
+{% endfor %}
+<button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+<a href="{% url 'bbs:login' %}">已有账号?</a>
+</form>
+
+{% include 'bbs/meta_footer.html' %}

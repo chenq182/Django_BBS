@@ -1,0 +1,17 @@
+{% include 'bbs/meta_head.html' %}
+<link rel="stylesheet" href="/static/bbs/login.css">
+{% include 'bbs/meta_header.html' %}
+
+
+<form action="{% url 'bbs:login' %}" method="post" class="form-signin">
+{% csrf_token %}
+  <br /><br />
+  <h2 class="form-signin-heading">请登录</h2>
+<input type="text" name="username" class="form-control" placeholder="用户名" required autofocus>
+<input type="password" name="password" class="form-control" placeholder="密码" required>
+{% if error_message %}<strong>{{ error_message }}</strong>{% endif %}
+<button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+<a href="{% url 'bbs:register' %}">注册</a>
+</form>
+
+{% include 'bbs/meta_footer.html' %}

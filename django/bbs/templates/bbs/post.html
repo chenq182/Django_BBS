@@ -48,7 +48,7 @@
       <img src="/static/bbs/default_portrait.jpeg" class="img-rounded" width="130px" height="130px">
       <br />{{ post.author.name }}
     </td>
-    <td colspan="2">{{ post.text }}
+    <td colspan="2">{{ post.text|linebreaksbr }}
     {% ifequal post.pfile_set.count 0 %}
     {% else %}
         <hr style="margin:2px;margin-top:10px">附件:<br />
@@ -83,7 +83,7 @@
       <img src="/static/bbs/default_portrait.jpeg" class="img-rounded" width="130px" height="130px">
       <br />{{ reply.author.name }}
     </td>
-    <td colspan="2">{{ reply.text }}</td>
+    <td colspan="2">{{ reply.text|linebreaksbr }}</td>
   </tr>
   <tr height=30px>
     <td colspan="2" class="text-muted" align="right">
